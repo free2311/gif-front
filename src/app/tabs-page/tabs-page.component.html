@@ -1,0 +1,93 @@
+<div class="max-w mx-auto mt-8 px-4">
+  <!-- Tabs -->
+  <div class="flex border-b border-black-300 mb-4">
+    <button
+      (click)="selectTab('current')"
+      [ngClass]="{
+        'text-blue-600 border-b-2 border-blue-600 font-semibold':
+          activeTab === 'current',
+        'text-gray-600 hover:text-blue-500': activeTab !== 'current'
+      }"
+      class="py-2 px-4 focus:outline-none"
+    >
+      Resultado actual
+    </button>
+    <button
+      (click)="selectTab('history')"
+      [ngClass]="{
+        'text-blue-600 border-b-2 border-blue-600 font-semibold':
+          activeTab === 'history',
+        'text-gray-600 hover:text-blue-500': activeTab !== 'history'
+      }"
+      class="py-2 px-4 focus:outline-none"
+    >
+      Historial de búsquedas
+    </button>
+  </div>
+
+  <!-- Resultado actual -->
+  <div
+    *ngIf="activeTab === 'current'"
+    class="bg-white shadow-md rounded-lg p-6"
+  >
+    <div
+      class="flex flex-col md:flex-row items-center justify-center gap-6 mb-4"
+    >
+      <img
+        [src]="currentGifUrl"
+        alt="GIF relacionado"
+        class="w-48 h-48 object-cover rounded-lg"
+      />
+      <div class="text-center md:text-left text-lg font-medium text-gray-700">
+        {{ currentFact }}
+      </div>
+    </div>
+    <div class="flex justify-center">
+      <button
+        class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded shadow"
+        (click)="refreshGif()"
+      >
+        Refrescar GIF
+      </button>
+    </div>
+  </div>
+
+  <!-- Historial -->
+  <div
+    *ngIf="activeTab === 'history'"
+    class="overflow-x-auto bg-white shadow-md rounded-lg p-6"
+  >
+    <table class="min-w-full text-left border border-gray-200">
+      <thead class="bg-gray-100">
+        <tr>
+          <th class="px-4 py-2 border-b border-gray-200">Fecha de búsqueda</th>
+          <th class="px-4 py-2 border-b border-gray-200">Texto completo</th>
+          <th class="px-4 py-2 border-b border-gray-200">Query</th>
+          <th class="px-4 py-2 border-b border-gray-200">URL del GIF</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          *ngFor="let entry of searchHistory"
+          class="hover:bg-gray-50 transition-colors"
+        >
+          <td class="px-4 py-2 border-b border-gray-200">
+            {{ entry.search_date | date : "dd/MM/yyyy HH:mm:ss" }}
+          </td>
+          <td class="px-4 py-2 border-b border-gray-200">{{ entry.fact }}</td>
+          <td class="px-4 py-2 border-b border-gray-200">
+            {{ entry.query }}
+          </td>
+          <td class="px-4 py-2 border-b border-gray-200">
+            <a
+              [href]="entry.gif_url"
+              target="_blank"
+              class="text-blue-500 underline"
+              >Ver GIF</a
+            >
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
